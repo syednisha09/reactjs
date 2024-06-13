@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,12 +16,5 @@ jobs:
         run: npm install -f
 
       - name: Deploy
-        uses: eastingthemes/ssh-deploy@v2
-        with:
-          REMOTE_HOST: ${{ secrets.SERVER_IP }}
-          REMOTE_USERNAME: ${{ secrets.SERVER_USERNAME }}
-          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
-          SOURCE: "." # Use "." to deploy all files in the current directory
-          TARGET: "/home"
-          ARGS: "-rltgoDzvO --delete"
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'cd /home && rsync -avz --delete /home] .'
