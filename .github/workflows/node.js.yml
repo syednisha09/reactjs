@@ -21,3 +21,4 @@ jobs:
           chmod 600 deploy_key
           ssh -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'rsync -avz --delete ./ /home/ubuntu/'
 
+
