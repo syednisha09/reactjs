@@ -1,30 +1,27 @@
 name: Deploy to server
 
 on:
-push:
-branches:
--main
-jobs:
- build:
- run-on:ubundu-latest
- steps:
- -uses:action/checkout@v2
- -name:Install dependencies
- run:npm install-f
- -name:deploy
- uses:eastingthemes/ssh-deploy@v2
- with:
- REMOTE_HOST:$
- {{secrets.SERVER_I}}
- REMOTE_USERNAME:$
- {{secrets.SERVER_USERNAME}}
- REMOTE_PORT:$
- {{secrets.SERVER_PORT}}
- SOURCE:"."#use"."to deploy all files in the current directory
- TARGET:"
- ARGS:"-rltgoDzvO--delete"
- SSH_PRIVATE_KEY:$
- {{secrets.SSH_PRIVATE_KEY}}
+  push:
+    branches:
+      - main
 
- 
- SS
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install -f
+
+      - name: Deploy
+        uses: eastingthemes/ssh-deploy@v2
+        with:
+          REMOTE_HOST: ${{ secrets.SERVER_IP }}
+          REMOTE_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+          SOURCE: "." # Use "." to deploy all files in the current directory
+          TARGET: "/home"
+          ARGS: "-rltgoDzvO --delete"
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
